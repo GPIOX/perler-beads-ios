@@ -34,6 +34,7 @@ final class WorkspaceModel: ObservableObject {
     let colorStore: ColorMappingStore
     private let processor = PatternProcessor()
     private var processingTask: Task<Void, Never>?
+    private weak var activeUndoManager: UndoManager?
     private static let globalPaletteDefaultsKey = "globalPaletteHexColors"
 
     init(document: PatternDocument) {
@@ -222,12 +223,22 @@ final class WorkspaceModel: ObservableObject {
     }
 
     func setGrid(_ newGrid: PatternGrid, replacing oldGrid: PatternGrid, undoManager: UndoManager?, actionName: String) {
+        if let undoManager {
+            activeUndoManager = undoManager
+        }
         document.project.grid = newGrid
         document.previewData = PatternExporter.renderPreview(grid: newGrid)
         document.project.modifiedAt = .now
         selectedPaintHex = selectedPaintHex ?? PatternEditing.statistics(for: newGrid).first?.hex
         undoManager?.registerUndo(withTarget: self) { target in
-            target.setGrid(oldGrid, replacing: newGrid, undoManager: undoManager, actionName: actionName)
+            MainActor.assumeIsolated {
+                target.setGrid(
+                    oldGrid,
+                    replacing: newGrid,
+                    undoManager: target.activeUndoManager,
+                    actionName: actionName
+                )
+            }
         }
         undoManager?.setActionName(actionName)
     }
