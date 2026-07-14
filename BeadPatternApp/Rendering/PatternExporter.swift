@@ -27,13 +27,15 @@ enum PatternExporter {
         let cellSize = min(30, rawCellSize)
         guard cellSize >= 16 else { throw PatternExportError.imageTooLarge }
 
-        let axis: CGFloat = 34
+        let axis: CGFloat = max(28, cellSize + 4)
         let titleHeight: CGFloat = 68
         let statsColumns = max(1, min(4, grid.columns * Int(cellSize) / 250))
         let statsRows = Int(ceil(Double(statistics.count) / Double(statsColumns)))
         let statsHeight = CGFloat(54 + statsRows * 28 + 42)
-        let width = axis + CGFloat(grid.columns) * cellSize + 20
-        let height = titleHeight + axis + CGFloat(grid.rows) * cellSize + statsHeight
+        let gridWidth = CGFloat(grid.columns) * cellSize
+        let gridHeight = CGFloat(grid.rows) * cellSize
+        let width = axis * 2 + gridWidth
+        let height = titleHeight + axis * 2 + gridHeight + statsHeight
 
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
@@ -56,6 +58,13 @@ enum PatternExporter {
             )
 
             let origin = CGPoint(x: axis, y: titleHeight + axis)
+            drawCoordinateAxes(
+                context: context,
+                origin: origin,
+                grid: grid,
+                cellSize: cellSize,
+                axisSize: axis
+            )
             for row in 0..<grid.rows {
                 for column in 0..<grid.columns {
                     let cell = grid[row, column]
@@ -82,44 +91,22 @@ enum PatternExporter {
                 }
             }
 
-            UIColor.darkGray.setStroke()
-            context.setLineWidth(1.5)
-            context.stroke(CGRect(
-                x: origin.x,
-                y: origin.y,
-                width: CGFloat(grid.columns) * cellSize,
-                height: CGFloat(grid.rows) * cellSize
-            ))
-            for value in stride(from: 10, to: grid.columns, by: 10) {
+            UIColor.black.setStroke()
+            context.setLineWidth(2.5)
+            context.setLineCap(.butt)
+            for value in PatternChartStyle.boardBoundaryIndices(for: grid.columns) {
                 let x = origin.x + CGFloat(value) * cellSize
                 context.move(to: CGPoint(x: x, y: origin.y))
-                context.addLine(to: CGPoint(x: x, y: origin.y + CGFloat(grid.rows) * cellSize))
-                context.strokePath()
+                context.addLine(to: CGPoint(x: x, y: origin.y + gridHeight))
             }
-            for value in stride(from: 10, to: grid.rows, by: 10) {
+            for value in PatternChartStyle.boardBoundaryIndices(for: grid.rows) {
                 let y = origin.y + CGFloat(value) * cellSize
                 context.move(to: CGPoint(x: origin.x, y: y))
-                context.addLine(to: CGPoint(x: origin.x + CGFloat(grid.columns) * cellSize, y: y))
-                context.strokePath()
+                context.addLine(to: CGPoint(x: origin.x + gridWidth, y: y))
             }
-            for value in stride(from: 0, through: grid.columns, by: 10) {
-                drawCentered(
-                    "\(value)",
-                    in: CGRect(x: origin.x + CGFloat(value) * cellSize - 20, y: titleHeight, width: 40, height: axis),
-                    font: .systemFont(ofSize: 11),
-                    color: .darkGray
-                )
-            }
-            for value in stride(from: 0, through: grid.rows, by: 10) {
-                drawCentered(
-                    "\(value)",
-                    in: CGRect(x: 0, y: origin.y + CGFloat(value) * cellSize - 10, width: axis, height: 20),
-                    font: .systemFont(ofSize: 11),
-                    color: .darkGray
-                )
-            }
+            context.strokePath()
 
-            let statsTop = origin.y + CGFloat(grid.rows) * cellSize + 28
+            let statsTop = origin.y + gridHeight + axis + 28
             ("颜色用量" as NSString).draw(
                 at: CGPoint(x: 24, y: statsTop),
                 withAttributes: [.font: UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor: UIColor.label]
@@ -146,6 +133,60 @@ enum PatternExporter {
         }
         guard let data = image.pngData() else { throw PatternExportError.encodingFailed }
         return data
+    }
+
+    private static func drawCoordinateAxes(
+        context: CGContext,
+        origin: CGPoint,
+        grid: PatternGrid,
+        cellSize: CGFloat,
+        axisSize: CGFloat
+    ) {
+        let gridWidth = CGFloat(grid.columns) * cellSize
+        let gridHeight = CGFloat(grid.rows) * cellSize
+        let topY = origin.y - axisSize
+        let bottomY = origin.y + gridHeight
+        let leftX = origin.x - axisSize
+        let rightX = origin.x + gridWidth
+
+        UIColor(white: 0.92, alpha: 1).setFill()
+        context.fill(CGRect(x: origin.x, y: topY, width: gridWidth, height: axisSize))
+        context.fill(CGRect(x: origin.x, y: bottomY, width: gridWidth, height: axisSize))
+        context.fill(CGRect(x: leftX, y: origin.y, width: axisSize, height: gridHeight))
+        context.fill(CGRect(x: rightX, y: origin.y, width: axisSize, height: gridHeight))
+
+        UIColor(white: 0.84, alpha: 1).setFill()
+        context.fill(CGRect(x: leftX, y: topY, width: axisSize, height: axisSize))
+        context.fill(CGRect(x: rightX, y: topY, width: axisSize, height: axisSize))
+        context.fill(CGRect(x: leftX, y: bottomY, width: axisSize, height: axisSize))
+        context.fill(CGRect(x: rightX, y: bottomY, width: axisSize, height: axisSize))
+
+        UIColor(white: 0.68, alpha: 1).setStroke()
+        context.setLineWidth(0.5)
+        let font = UIFont.monospacedDigitSystemFont(
+            ofSize: min(9, max(6, cellSize * 0.32)),
+            weight: .regular
+        )
+        for column in 0..<grid.columns {
+            let x = origin.x + CGFloat(column) * cellSize
+            let top = CGRect(x: x, y: topY, width: cellSize, height: axisSize)
+            let bottom = CGRect(x: x, y: bottomY, width: cellSize, height: axisSize)
+            context.stroke(top)
+            context.stroke(bottom)
+            let value = "\(column + 1)"
+            drawCentered(value, in: top, font: font, color: .darkGray)
+            drawCentered(value, in: bottom, font: font, color: .darkGray)
+        }
+        for row in 0..<grid.rows {
+            let y = origin.y + CGFloat(row) * cellSize
+            let left = CGRect(x: leftX, y: y, width: axisSize, height: cellSize)
+            let right = CGRect(x: rightX, y: y, width: axisSize, height: cellSize)
+            context.stroke(left)
+            context.stroke(right)
+            let value = "\(row + 1)"
+            drawCentered(value, in: left, font: font, color: .darkGray)
+            drawCentered(value, in: right, font: font, color: .darkGray)
+        }
     }
 
     static func renderPreview(grid: PatternGrid, maximumDimension: CGFloat = 600) -> Data? {
@@ -177,9 +218,16 @@ enum PatternExporter {
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
         paragraph.lineBreakMode = .byClipping
-        (text as NSString).draw(
-            in: rect,
-            withAttributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraph]
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: color,
+            .paragraphStyle: paragraph,
+        ]
+        let value = text as NSString
+        let textHeight = ceil(value.size(withAttributes: attributes).height)
+        value.draw(
+            in: CGRect(x: rect.minX, y: rect.midY - textHeight / 2, width: rect.width, height: textHeight),
+            withAttributes: attributes
         )
     }
 }

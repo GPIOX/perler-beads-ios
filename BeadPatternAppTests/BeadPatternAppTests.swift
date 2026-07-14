@@ -37,6 +37,60 @@ import UIKit
     #expect(PatternExporter.renderPreview(grid: grid) != nil)
 }
 
+@Test func boardBoundariesFollowTwentyNineByTwentyNineBoards() {
+    #expect(PatternChartStyle.boardBoundaryIndices(for: 29) == [0, 29])
+    #expect(PatternChartStyle.boardBoundaryIndices(for: 67) == [0, 29, 58, 67])
+}
+
+@Test func exportedChartIncludesCoordinatesOnAllFourSides() throws {
+    let grid = PatternGrid(
+        columns: 30,
+        rows: 31,
+        cells: Array(repeating: .transparent, count: 30 * 31)
+    )
+    let colorStore = try ColorMappingStore.bundled()
+    let data = try PatternExporter.renderPNG(
+        grid: grid,
+        statistics: [],
+        colorStore: colorStore,
+        colorSystem: .mard
+    )
+    let image = try #require(UIImage(data: data))
+
+    // 30 px 单格 + 左右各 34 px 坐标轴。
+    #expect(image.size.width == 968)
+    // 68 px 标题 + 上下各 34 px 坐标轴 + 统计区。
+    #expect(image.size.height == 1_162)
+}
+
+@Test @MainActor func canvasRendersCoordinateBoardStyle() throws {
+    let grid = PatternGrid(
+        columns: 30,
+        rows: 30,
+        cells: (0..<(30 * 30)).map { index in
+            PatternCell(hex: index.isMultiple(of: 2) ? "#F4B6C2" : "#4A5568")
+        }
+    )
+    let colorStore = try ColorMappingStore.bundled()
+    let canvas = PatternCanvasView(frame: CGRect(x: 0, y: 0, width: 390, height: 500))
+    canvas.update(
+        grid: grid,
+        colorStore: colorStore,
+        colorSystem: .mard,
+        drawingEnabled: false,
+        focusHex: nil,
+        completed: [],
+        highlighted: [],
+        onCell: { _, _ in }
+    )
+    canvas.layoutIfNeeded()
+    let image = UIGraphicsImageRenderer(bounds: canvas.bounds).image { _ in
+        canvas.draw(canvas.bounds)
+    }
+
+    #expect(try #require(image.pngData()).count > 10_000)
+}
+
 @Test func newDocumentContainsImmediatePreview() throws {
     let document = PatternDocument()
     let snapshot = try document.snapshot(contentType: .beadPatternProject)
