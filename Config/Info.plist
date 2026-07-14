@@ -28,6 +28,8 @@
     <true/>
     <key>NSCameraUsageDescription</key>
     <string>用于拍摄需要转换成拼豆图纸的图片。图片只在本机处理。</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>用于将你导出的 PNG 拼豆图纸保存到照片。App 不会读取照片图库。</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>
@@ -60,6 +62,22 @@
             <key>LSItemContentTypes</key>
             <array>
                 <string>com.cwc.beadpattern.project</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>可导入的图片或 CSV</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.png</string>
+                <string>public.jpeg</string>
+                <string>public.heic</string>
+                <string>com.compuserve.gif</string>
+                <string>public.comma-separated-values-text</string>
             </array>
         </dict>
     </array>

@@ -16,9 +16,16 @@ enum EditorTool: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+enum WorkspacePhase: Equatable {
+    case setup
+    case processing
+    case result
+}
+
 @MainActor
 final class WorkspaceModel: ObservableObject {
     @Published var mode: WorkspaceMode = .preview
+    @Published var phase: WorkspacePhase
     @Published var editorTool: EditorTool = .paint
     @Published var selectedPaintHex: String?
     @Published var processingProgress: Double = 0
@@ -29,16 +36,22 @@ final class WorkspaceModel: ObservableObject {
     @Published var showsShareSheet = false
     @Published var showsPalette = false
     @Published var showsReplaceSheet = false
+    @Published var isExporting = false
+    @Published var successMessage: String?
+    @Published var offersSettingsForError = false
 
     let document: PatternDocument
     let colorStore: ColorMappingStore
     private let processor = PatternProcessor()
     private var processingTask: Task<Void, Never>?
     private weak var activeUndoManager: UndoManager?
-    private static let globalPaletteDefaultsKey = "globalPaletteHexColors"
+    private let photoLibrarySaver: any PhotoLibrarySaving
+    static let globalPaletteDefaultsKey = "globalPaletteHexColors"
 
-    init(document: PatternDocument) {
+    init(document: PatternDocument, photoLibrarySaver: any PhotoLibrarySaving = PhotoLibrarySaver()) {
         self.document = document
+        self.photoLibrarySaver = photoLibrarySaver
+        phase = document.project.grid == nil ? .setup : .result
         let store = try! ColorMappingStore.bundled()
         colorStore = store
         if document.project.settings.selectedHexColors.isEmpty {
@@ -53,6 +66,15 @@ final class WorkspaceModel: ObservableObject {
     var grid: PatternGrid? { document.project.grid }
     var statistics: [ColorCount] { grid.map(PatternEditing.statistics) ?? [] }
     var totalBeads: Int { statistics.reduce(0) { $0 + $1.count } }
+
+    static func defaultSettings(colorStore: ColorMappingStore) -> PatternSettings {
+        var settings = PatternSettings()
+        let known = Set(colorStore.palette.map(\.hex))
+        let saved = UserDefaults.standard.stringArray(forKey: globalPaletteDefaultsKey) ?? []
+        let validSaved = Set(saved.map { $0.uppercased() }).intersection(known)
+        settings.selectedHexColors = validSaved.isEmpty ? known : validSaved
+        return settings
+    }
 
     func saveGlobalPaletteDefault() {
         UserDefaults.standard.set(
@@ -80,6 +102,8 @@ final class WorkspaceModel: ObservableObject {
             document.project.settings.columns = min(300, max(10, result.grid.columns))
             document.project.modifiedAt = .now
             selectedPaintHex = PatternEditing.statistics(for: result.grid).first?.hex
+            mode = .preview
+            phase = .result
             if !result.unmappedHexColors.isEmpty {
                 warningMessage = "已导入，但有 \(result.unmappedHexColors.count) 种颜色没有品牌色号。"
             }
@@ -99,6 +123,7 @@ final class WorkspaceModel: ObservableObject {
             let settings = document.project.settings
             let palette = try colorStore.activePalette(settings: settings)
             isProcessing = true
+            if grid == nil { phase = .processing }
             processingProgress = 0
             errorMessage = nil
             processingTask = Task { [weak self] in
@@ -117,15 +142,19 @@ final class WorkspaceModel: ObservableObject {
                     document.project.focusProgress = FocusProgress()
                     document.project.modifiedAt = .now
                     selectedPaintHex = PatternEditing.statistics(for: result).first?.hex
+                    mode = .preview
+                    phase = .result
                 } catch is CancellationError {
                     // A cancelled operation never replaces the current document grid.
                 } catch {
                     errorMessage = error.localizedDescription
+                    phase = grid == nil ? .setup : .result
                 }
                 isProcessing = false
             }
         } catch {
             isProcessing = false
+            phase = grid == nil ? .setup : .result
             errorMessage = error.localizedDescription
         }
     }
@@ -134,6 +163,7 @@ final class WorkspaceModel: ObservableObject {
         processingTask?.cancel()
         processingTask = nil
         isProcessing = false
+        phase = grid == nil ? .setup : .result
     }
 
     func editCell(row: Int, column: Int, undoManager: UndoManager?) {
@@ -243,21 +273,47 @@ final class WorkspaceModel: ObservableObject {
         undoManager?.setActionName(actionName)
     }
 
-    func exportPNG() {
+    func sharePNG() {
+        exportPNG(saveToPhotos: false)
+    }
+
+    func savePNGToPhotos() {
+        exportPNG(saveToPhotos: true)
+    }
+
+    private func exportPNG(saveToPhotos: Bool) {
         guard let grid else { return }
-        do {
-            let data = try PatternExporter.renderPNG(
-                grid: grid,
-                statistics: statistics,
-                colorStore: colorStore,
-                colorSystem: document.project.settings.colorSystem
-            )
-            let url = try temporaryURL(extension: "png")
-            try data.write(to: url, options: .atomic)
-            shareItems = [url]
-            showsShareSheet = true
-        } catch {
-            errorMessage = error.localizedDescription
+        guard !isExporting else { return }
+        let statistics = statistics
+        let colorStore = colorStore
+        let colorSystem = document.project.settings.colorSystem
+        isExporting = true
+        offersSettingsForError = false
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let data = try await Task.detached(priority: .userInitiated) {
+                    try PatternExporter.renderPNG(
+                        grid: grid,
+                        statistics: statistics,
+                        colorStore: colorStore,
+                        colorSystem: colorSystem
+                    )
+                }.value
+                if saveToPhotos {
+                    try await photoLibrarySaver.savePNG(data)
+                    successMessage = "PNG 已保存到照片。"
+                } else {
+                    let url = try temporaryURL(extension: "png")
+                    try data.write(to: url, options: .atomic)
+                    shareItems = [url]
+                    showsShareSheet = true
+                }
+            } catch {
+                offersSettingsForError = error as? PhotoLibrarySaveError == .permissionDenied
+                errorMessage = error.localizedDescription
+            }
+            isExporting = false
         }
     }
 

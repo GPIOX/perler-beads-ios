@@ -16,6 +16,7 @@ final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked
     }
 
     static var readableContentTypes: [UTType] { [.beadPatternProject] }
+    static var writableContentTypes: [UTType] { [.beadPatternProject] }
 
     @Published var project: PatternProject
     @Published var sourceData: Data?
@@ -62,6 +63,10 @@ final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked
     }
 
     func fileWrapper(snapshot: Snapshot, configuration: WriteConfiguration) throws -> FileWrapper {
+        try Self.makeFileWrapper(snapshot: snapshot)
+    }
+
+    static func makeFileWrapper(snapshot: Snapshot) throws -> FileWrapper {
         var project = snapshot.project
         project.sourceFilename = snapshot.sourceFilename
         project.modifiedAt = .now
@@ -79,7 +84,7 @@ final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked
     }
 }
 
-private extension JSONEncoder {
+extension JSONEncoder {
     static var projectEncoder: JSONEncoder {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -88,7 +93,7 @@ private extension JSONEncoder {
     }
 }
 
-private extension JSONDecoder {
+extension JSONDecoder {
     static var projectDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601

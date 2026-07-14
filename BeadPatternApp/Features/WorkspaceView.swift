@@ -7,10 +7,12 @@ struct WorkspaceView: View {
     @ObservedObject private var document: PatternDocument
     @StateObject private var model: WorkspaceModel
     @Environment(\.undoManager) private var undoManager
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var photoItem: PhotosPickerItem?
     @State private var showsFileImporter = false
     @State private var showsCamera = false
     @State private var showsAbout = false
+    @State private var showsCompactSettings = false
 
     init(document: PatternDocument) {
         self.document = document
@@ -18,40 +20,12 @@ struct WorkspaceView: View {
     }
 
     var body: some View {
-        NavigationSplitView {
-            settingsSidebar
-                .navigationTitle("拼豆图纸")
-        } detail: {
-            VStack(spacing: 0) {
-                Picker("工作模式", selection: $model.mode) {
-                    ForEach(WorkspaceMode.allCases) { mode in
-                        Text(mode.rawValue).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding()
-
-                if model.isProcessing {
-                    processingView
-                } else if let grid = model.grid {
-                    switch model.mode {
-                    case .preview:
-                        PreviewModeView(model: model, grid: grid)
-                    case .edit:
-                        EditModeView(model: model, grid: grid, undoManager: undoManager)
-                    case .focus:
-                        FocusModeView(model: model, grid: grid)
-                    }
-                } else {
-                    ContentUnavailableView(
-                        "导入第一张图片",
-                        systemImage: "square.grid.3x3.fill",
-                        description: Text("从照片、文件或相机导入，也可以打开 Web 版导出的 CSV。")
-                    )
-                }
+        Group {
+            if horizontalSizeClass == .compact {
+                compactWorkspace
+            } else {
+                regularWorkspace
             }
-            .navigationTitle(document.project.title)
-            .toolbar { workspaceToolbar }
         }
         .onChange(of: photoItem) { _, item in
             guard let item else { return }
@@ -64,7 +38,7 @@ struct WorkspaceView: View {
         }
         .fileImporter(
             isPresented: $showsFileImporter,
-            allowedContentTypes: [.image, .commaSeparatedText, .plainText],
+            allowedContentTypes: [.image, .commaSeparatedText],
             allowsMultipleSelection: false
         ) { result in
             importFile(result)
@@ -74,6 +48,18 @@ struct WorkspaceView: View {
                 model.importImage(data: data, filename: "source.jpg")
             }
             .ignoresSafeArea()
+        }
+        .sheet(isPresented: $showsCompactSettings) {
+            NavigationStack {
+                settingsForm
+                    .navigationTitle("图纸设置")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("完成") { showsCompactSettings = false }
+                        }
+                    }
+            }
         }
         .sheet(isPresented: $model.showsPalette) {
             PaletteManagerView(model: model)
@@ -88,7 +74,13 @@ struct WorkspaceView: View {
             AboutView()
         }
         .alert("操作失败", isPresented: errorBinding) {
-            Button("好") { model.errorMessage = nil }
+            if model.offersSettingsForError {
+                Button("打开设置") { openSystemSettings() }
+            }
+            Button("好") {
+                model.errorMessage = nil
+                model.offersSettingsForError = false
+            }
         } message: {
             Text(model.errorMessage ?? "")
         }
@@ -97,9 +89,81 @@ struct WorkspaceView: View {
         } message: {
             Text(model.warningMessage ?? "")
         }
+        .overlay(alignment: .top) {
+            if let message = model.successMessage {
+                Label(message, systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.green, in: Capsule())
+                    .padding(.top, 10)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .task(id: model.successMessage) {
+            guard let message = model.successMessage else { return }
+            try? await Task.sleep(for: .seconds(2))
+            guard model.successMessage == message else { return }
+            withAnimation { model.successMessage = nil }
+        }
     }
 
-    private var settingsSidebar: some View {
+    private var regularWorkspace: some View {
+        NavigationSplitView {
+            settingsSidebar
+                .navigationTitle("拼豆图纸")
+        } detail: {
+            VStack(spacing: 0) {
+                modePicker.padding()
+
+                if model.phase == .processing {
+                    processingView
+                } else if let grid = model.grid {
+                    modeContent(grid: grid)
+                } else {
+                    ContentUnavailableView(
+                        "导入第一张图片",
+                        systemImage: "square.grid.3x3.fill",
+                        description: Text("从照片、文件或相机导入，也可以打开 Web 版导出的 CSV。")
+                    )
+                }
+            }
+            .navigationTitle(document.project.title)
+            .toolbar { workspaceToolbar }
+            .overlay { activityOverlay }
+        }
+    }
+
+    private var compactWorkspace: some View {
+        Group {
+            switch model.phase {
+            case .setup:
+                settingsForm
+            case .processing:
+                processingView
+            case .result:
+                if let grid = model.grid {
+                    modeContent(grid: grid)
+                        .safeAreaInset(edge: .bottom, spacing: 0) {
+                            modePicker
+                                .padding(.horizontal)
+                                .padding(.vertical, 10)
+                                .background(.regularMaterial)
+                        }
+                } else {
+                    settingsForm
+                }
+            }
+        }
+        .navigationTitle(document.project.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { compactToolbar }
+        .overlay { activityOverlay }
+    }
+
+    private var settingsSidebar: some View { settingsForm }
+
+    private var settingsForm: some View {
         Form {
             Section("导入") {
                 PhotosPicker(selection: $photoItem, matching: .images) {
@@ -132,10 +196,15 @@ struct WorkspaceView: View {
                     Label("管理色板", systemImage: "paintpalette")
                 }
                 Button(action: model.regenerate) {
-                    Label("生成 / 重新生成", systemImage: "wand.and.stars")
+                    HStack {
+                        Image(systemName: "wand.and.stars")
+                        Text("生成 / 重新生成")
+                        Spacer(minLength: 0)
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(document.sourceData == nil)
+                .accessibilityIdentifier("generateButton")
             }
 
             if let grid = model.grid {
@@ -146,9 +215,7 @@ struct WorkspaceView: View {
                     Button { model.removeBackground(undoManager: undoManager) } label: {
                         Label("一键去背景", systemImage: "eraser.line.dashed")
                     }
-                    Button { model.exportPNG() } label: {
-                        Label("导出 PNG 图纸", systemImage: "square.and.arrow.up")
-                    }
+                    pngExportMenu
                     Button { model.exportCSV() } label: {
                         Label("导出 CSV 源数据", systemImage: "tablecells")
                     }
@@ -162,6 +229,27 @@ struct WorkspaceView: View {
             }
         }
         .formStyle(.grouped)
+    }
+
+    private var modePicker: some View {
+        Picker("工作模式", selection: $model.mode) {
+            ForEach(WorkspaceMode.allCases) { mode in
+                Text(mode.rawValue).tag(mode)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    @ViewBuilder
+    private func modeContent(grid: PatternGrid) -> some View {
+        switch model.mode {
+        case .preview:
+            PreviewModeView(model: model, grid: grid)
+        case .edit:
+            EditModeView(model: model, grid: grid, undoManager: undoManager)
+        case .focus:
+            FocusModeView(model: model, grid: grid)
+        }
     }
 
     private var processingView: some View {
@@ -182,6 +270,57 @@ struct WorkspaceView: View {
                 .disabled(!(undoManager?.canUndo ?? false))
             Button { undoManager?.redo() } label: { Image(systemName: "arrow.uturn.forward") }
                 .disabled(!(undoManager?.canRedo ?? false))
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var compactToolbar: some ToolbarContent {
+        if model.phase == .result {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button { showsCompactSettings = true } label: {
+                    Image(systemName: "slider.horizontal.3")
+                }
+                .accessibilityLabel("图纸设置")
+                pngExportMenu
+            }
+        }
+    }
+
+    private var pngExportMenu: some View {
+        Menu {
+            Button { model.savePNGToPhotos() } label: {
+                Label("保存到照片", systemImage: "photo.badge.arrow.down")
+            }
+            Button { model.sharePNG() } label: {
+                Label("分享或保存到文件", systemImage: "square.and.arrow.up")
+            }
+        } label: {
+            Label("导出 PNG 图纸", systemImage: "square.and.arrow.up")
+        }
+        .disabled(model.grid == nil || model.isExporting)
+    }
+
+    @ViewBuilder
+    private var activityOverlay: some View {
+        if model.isExporting {
+            ZStack {
+                Color.black.opacity(0.18).ignoresSafeArea()
+                ProgressView("正在生成 PNG…")
+                    .padding(24)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+            }
+        } else if model.isProcessing && model.phase == .result {
+            ZStack {
+                Color.black.opacity(0.15).ignoresSafeArea()
+                VStack(spacing: 12) {
+                    ProgressView(value: model.processingProgress)
+                        .frame(width: 220)
+                    Text("正在重新生成… \(Int(model.processingProgress * 100))%")
+                    Button("取消", role: .cancel, action: model.cancelProcessing)
+                }
+                .padding(24)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+            }
         }
     }
 
@@ -222,5 +361,12 @@ struct WorkspaceView: View {
 
     private var warningBinding: Binding<Bool> {
         Binding(get: { model.warningMessage != nil }, set: { if !$0 { model.warningMessage = nil } })
+    }
+
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+        model.errorMessage = nil
+        model.offersSettingsForError = false
     }
 }
