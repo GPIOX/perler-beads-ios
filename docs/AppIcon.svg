@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="background" x1="90" y1="80" x2="930" y2="950" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#19376D"/><stop offset="1" stop-color="#0B1026"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000" flood-opacity=".32"/></filter>
+  </defs>
+  <rect width="1024" height="1024" rx="220" fill="url(#background)"/>
+  <path d="M144 310C270 121 550 83 760 202c105 60 172 151 199 260" fill="none" stroke="#78E4FF" stroke-width="28" stroke-linecap="round" opacity=".35"/>
+  <g filter="url(#shadow)">
+    <rect x="176" y="176" width="672" height="672" rx="128" fill="#F7FAFF"/>
+    <g stroke="#D6DFEE" stroke-width="14">
+      <circle cx="344" cy="344" r="96" fill="#FF6B8A"/><circle cx="512" cy="344" r="96" fill="#FFBF47"/><circle cx="680" cy="344" r="96" fill="#61D6A4"/>
+      <circle cx="344" cy="512" r="96" fill="#6A8DFF"/><circle cx="512" cy="512" r="96" fill="#A779FF"/><circle cx="680" cy="512" r="96" fill="#42C8F5"/>
+      <circle cx="344" cy="680" r="96" fill="#FF8D5C"/><circle cx="512" cy="680" r="96" fill="#F05CB6"/><circle cx="680" cy="680" r="96" fill="#7CD957"/>
+    </g>
+    <g fill="#fff" opacity=".6">
+      <circle cx="316" cy="316" r="22"/><circle cx="484" cy="316" r="22"/><circle cx="652" cy="316" r="22"/>
+      <circle cx="316" cy="484" r="22"/><circle cx="484" cy="484" r="22"/><circle cx="652" cy="484" r="22"/>
+      <circle cx="316" cy="652" r="22"/><circle cx="484" cy="652" r="22"/><circle cx="652" cy="652" r="22"/>
+    </g>
+  </g>
+</svg>

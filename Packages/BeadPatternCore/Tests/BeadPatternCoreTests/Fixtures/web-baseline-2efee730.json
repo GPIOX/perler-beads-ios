@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "2efee730f73dd4eb472ebde443a022d11f98bc21",
+  "width": 10,
+  "height": 1,
+  "columns": 10,
+  "mergeThreshold": 0,
+  "mode": "dominant",
+  "rgba": [
+    250,244,200,255, 255,255,213,255, 250,244,200,255, 255,255,213,255, 250,244,200,255,
+    255,255,213,255, 250,244,200,255, 255,255,213,255, 250,244,200,255, 255,255,213,255
+  ],
+  "expectedHex": [
+    "#FAF4C8", "#FFFFD5", "#FAF4C8", "#FFFFD5", "#FAF4C8",
+    "#FFFFD5", "#FAF4C8", "#FFFFD5", "#FAF4C8", "#FFFFD5"
+  ]
+}

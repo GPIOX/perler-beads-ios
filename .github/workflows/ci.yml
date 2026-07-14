@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core-tests:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test core package
+        run: swift test --package-path Packages/BeadPatternCore
+
+  ios-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build for simulator
+        run: >-
+          xcodebuild -project BeadPattern.xcodeproj -scheme BeadPatternApp
+          -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

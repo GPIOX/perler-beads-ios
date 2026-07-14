@@ -1,0 +1,130 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* BeadPatternApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* BeadPatternApp.swift */; };
+		A10000000000000000000002 /* PatternDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* PatternDocument.swift */; };
+		A10000000000000000000003 /* WorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* WorkspaceView.swift */; };
+		A10000000000000000000004 /* ModeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* ModeViews.swift */; };
+		A10000000000000000000005 /* PaletteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* PaletteViews.swift */; };
+		A10000000000000000000006 /* SystemViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* SystemViews.swift */; };
+		A10000000000000000000007 /* PatternCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* PatternCanvasView.swift */; };
+		A10000000000000000000008 /* PatternExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* PatternExporter.swift */; };
+		A10000000000000000000009 /* RasterDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* RasterDecoder.swift */; };
+		A1000000000000000000000A /* WorkspaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* WorkspaceModel.swift */; };
+		A1000000000000000000000B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* PrivacyInfo.xcprivacy */; };
+		A1000000000000000000000C /* BeadPatternCore in Frameworks */ = {isa = PBXBuildFile; productRef = A90000000000000000000002 /* BeadPatternCore */; };
+		A1000000000000000000000D /* BeadPatternAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* BeadPatternAppTests.swift */; };
+		A1000000000000000000000E /* BeadPatternAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* BeadPatternAppUITests.swift */; };
+		A1000000000000000000000F /* BeadPatternCore in Frameworks */ = {isa = PBXBuildFile; productRef = A90000000000000000000002 /* BeadPatternCore */; };
+		A10000000000000000000010 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* Localizable.xcstrings */; };
+		A10000000000000000000011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A30000000000000000000001 = {isa = PBXContainerItemProxy; containerPortal = A40000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = A50000000000000000000001; remoteInfo = BeadPatternApp; };
+		A30000000000000000000002 = {isa = PBXContainerItemProxy; containerPortal = A40000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = A50000000000000000000001; remoteInfo = BeadPatternApp; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* BeadPatternApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeadPatternApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* PatternDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternDocument.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* WorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceView.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* ModeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeViews.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* PaletteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteViews.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* SystemViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemViews.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* PatternCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternCanvasView.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* PatternExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternExporter.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* RasterDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RasterDecoder.swift; sourceTree = "<group>"; };
+		A2000000000000000000000A /* WorkspaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceModel.swift; sourceTree = "<group>"; };
+		A2000000000000000000000B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A2000000000000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000000000000000000000D /* BeadPatternAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeadPatternAppTests.swift; sourceTree = "<group>"; };
+		A2000000000000000000000E /* BeadPatternAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeadPatternAppUITests.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* BeadPatternApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeadPatternApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000010 /* BeadPatternAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeadPatternAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000011 /* BeadPatternAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeadPatternAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A20000000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A60000000000000000000001 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A1000000000000000000000C /* BeadPatternCore in Frameworks */,); runOnlyForDeploymentPostprocessing = 0; };
+		A60000000000000000000002 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A1000000000000000000000F /* BeadPatternCore in Frameworks */,); runOnlyForDeploymentPostprocessing = 0; };
+		A60000000000000000000003 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A70000000000000000000001 = {isa = PBXGroup; children = (A70000000000000000000002 /* BeadPatternApp */, A70000000000000000000008 /* BeadPatternAppTests */, A70000000000000000000009 /* BeadPatternAppUITests */, A7000000000000000000000A /* Config */, A7000000000000000000000B /* Products */); sourceTree = "<group>"; };
+		A70000000000000000000002 /* BeadPatternApp */ = {isa = PBXGroup; path = BeadPatternApp; sourceTree = "<group>"; children = (A70000000000000000000003 /* App */, A70000000000000000000004 /* Documents */, A70000000000000000000005 /* Features */, A70000000000000000000006 /* Rendering */, A70000000000000000000007 /* Support */, A7000000000000000000000C /* Resources */); };
+		A70000000000000000000003 /* App */ = {isa = PBXGroup; path = App; sourceTree = "<group>"; children = (A20000000000000000000001 /* BeadPatternApp.swift */,); };
+		A70000000000000000000004 /* Documents */ = {isa = PBXGroup; path = Documents; sourceTree = "<group>"; children = (A20000000000000000000002 /* PatternDocument.swift */,); };
+		A70000000000000000000005 /* Features */ = {isa = PBXGroup; path = Features; sourceTree = "<group>"; children = (A20000000000000000000003 /* WorkspaceView.swift */, A20000000000000000000004 /* ModeViews.swift */, A20000000000000000000005 /* PaletteViews.swift */, A20000000000000000000006 /* SystemViews.swift */); };
+		A70000000000000000000006 /* Rendering */ = {isa = PBXGroup; path = Rendering; sourceTree = "<group>"; children = (A20000000000000000000007 /* PatternCanvasView.swift */, A20000000000000000000008 /* PatternExporter.swift */); };
+		A70000000000000000000007 /* Support */ = {isa = PBXGroup; path = Support; sourceTree = "<group>"; children = (A20000000000000000000009 /* RasterDecoder.swift */, A2000000000000000000000A /* WorkspaceModel.swift */); };
+		A70000000000000000000008 /* BeadPatternAppTests */ = {isa = PBXGroup; path = BeadPatternAppTests; sourceTree = "<group>"; children = (A2000000000000000000000D /* BeadPatternAppTests.swift */,); };
+		A70000000000000000000009 /* BeadPatternAppUITests */ = {isa = PBXGroup; path = BeadPatternAppUITests; sourceTree = "<group>"; children = (A2000000000000000000000E /* BeadPatternAppUITests.swift */,); };
+		A7000000000000000000000A /* Config */ = {isa = PBXGroup; path = Config; sourceTree = "<group>"; children = (A2000000000000000000000C /* Info.plist */,); };
+		A7000000000000000000000B /* Products */ = {isa = PBXGroup; name = Products; sourceTree = "<group>"; children = (A2000000000000000000000F /* BeadPatternApp.app */, A20000000000000000000010 /* BeadPatternAppTests.xctest */, A20000000000000000000011 /* BeadPatternAppUITests.xctest */); };
+		A7000000000000000000000C /* Resources */ = {isa = PBXGroup; path = Resources; sourceTree = "<group>"; children = (A2000000000000000000000B /* PrivacyInfo.xcprivacy */, A20000000000000000000012 /* Localizable.xcstrings */, A20000000000000000000013 /* Assets.xcassets */); };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* BeadPatternApp */ = {isa = PBXNativeTarget; buildConfigurationList = AB0000000000000000000001; buildPhases = (AC0000000000000000000001 /* Sources */, A60000000000000000000001 /* Frameworks */, AD0000000000000000000001 /* Resources */); buildRules = (); dependencies = (); name = BeadPatternApp; packageProductDependencies = (A90000000000000000000002 /* BeadPatternCore */,); productName = BeadPatternApp; productReference = A2000000000000000000000F /* BeadPatternApp.app */; productType = "com.apple.product-type.application"; };
+		A50000000000000000000002 /* BeadPatternAppTests */ = {isa = PBXNativeTarget; buildConfigurationList = AB0000000000000000000002; buildPhases = (AC0000000000000000000002 /* Sources */, A60000000000000000000002 /* Frameworks */, AD0000000000000000000002 /* Resources */); buildRules = (); dependencies = (AE0000000000000000000001 /* PBXTargetDependency */,); name = BeadPatternAppTests; packageProductDependencies = (A90000000000000000000002 /* BeadPatternCore */,); productName = BeadPatternAppTests; productReference = A20000000000000000000010 /* BeadPatternAppTests.xctest */; productType = "com.apple.product-type.bundle.unit-test"; };
+		A50000000000000000000003 /* BeadPatternAppUITests */ = {isa = PBXNativeTarget; buildConfigurationList = AB0000000000000000000003; buildPhases = (AC0000000000000000000003 /* Sources */, A60000000000000000000003 /* Frameworks */, AD0000000000000000000003 /* Resources */); buildRules = (); dependencies = (AE0000000000000000000002 /* PBXTargetDependency */,); name = BeadPatternAppUITests; packageProductDependencies = (); productName = BeadPatternAppUITests; productReference = A20000000000000000000011 /* BeadPatternAppUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A40000000000000000000001 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 2660; LastUpgradeCheck = 2660; TargetAttributes = {A50000000000000000000001 = {CreatedOnToolsVersion = 26.0; }; A50000000000000000000002 = {CreatedOnToolsVersion = 26.0; TestTargetID = A50000000000000000000001; }; A50000000000000000000003 = {CreatedOnToolsVersion = 26.0; TestTargetID = A50000000000000000000001; };};}; buildConfigurationList = AB0000000000000000000000; compatibilityVersion = "Xcode 14.0"; developmentRegion = zh_CN; hasScannedForEncodings = 0; knownRegions = (Base, zh_CN, en); mainGroup = A70000000000000000000001; packageReferences = (A90000000000000000000001 /* XCLocalSwiftPackageReference "BeadPatternCore" */,); productRefGroup = A7000000000000000000000B /* Products */; projectDirPath = ""; projectRoot = ""; targets = (A50000000000000000000001 /* BeadPatternApp */, A50000000000000000000002 /* BeadPatternAppTests */, A50000000000000000000003 /* BeadPatternAppUITests */); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD0000000000000000000001 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A1000000000000000000000B /* PrivacyInfo.xcprivacy in Resources */, A10000000000000000000010 /* Localizable.xcstrings in Resources */, A10000000000000000000011 /* Assets.xcassets in Resources */); runOnlyForDeploymentPostprocessing = 0; };
+		AD0000000000000000000002 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AD0000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC0000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000001, A10000000000000000000002, A10000000000000000000003, A10000000000000000000004, A10000000000000000000005, A10000000000000000000006, A10000000000000000000007, A10000000000000000000008, A10000000000000000000009, A1000000000000000000000A); runOnlyForDeploymentPostprocessing = 0; };
+		AC0000000000000000000002 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A1000000000000000000000D /* BeadPatternAppTests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
+		AC0000000000000000000003 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A1000000000000000000000E /* BeadPatternAppUITests.swift in Sources */,); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AE0000000000000000000001 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = A50000000000000000000001 /* BeadPatternApp */; targetProxy = A30000000000000000000001; };
+		AE0000000000000000000002 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = A50000000000000000000001 /* BeadPatternApp */; targetProxy = A30000000000000000000002; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AF0000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_OPTIMIZATION_LEVEL = 0; ONLY_ACTIVE_ARCH = YES; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; name = Debug; };
+		AF0000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; ENABLE_NS_ASSERTIONS = NO; GCC_C_LANGUAGE_STANDARD = gnu17; SDKROOT = iphoneos; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; VALIDATE_PRODUCT = YES; }; name = Release; };
+		AF0000000000000000000011 /* App Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Config/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern; PRODUCT_MODULE_NAME = BeadPatternApp; PRODUCT_NAME = BeadPatternApp; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_STRICT_CONCURRENCY = complete; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		AF0000000000000000000012 /* App Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Config/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern; PRODUCT_MODULE_NAME = BeadPatternApp; PRODUCT_NAME = BeadPatternApp; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_STRICT_CONCURRENCY = complete; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		AF0000000000000000000021 /* Tests Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BeadPatternApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BeadPatternApp"; }; name = Debug; };
+		AF0000000000000000000022 /* Tests Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BeadPatternApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BeadPatternApp"; }; name = Release; };
+		AF0000000000000000000031 /* UI Tests Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = BeadPatternApp; }; name = Debug; };
+		AF0000000000000000000032 /* UI Tests Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.cwc.beadpattern.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = BeadPatternApp; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB0000000000000000000000 = {isa = XCConfigurationList; buildConfigurations = (AF0000000000000000000001 /* Debug */, AF0000000000000000000002 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		AB0000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (AF0000000000000000000011 /* Debug */, AF0000000000000000000012 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		AB0000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (AF0000000000000000000021 /* Debug */, AF0000000000000000000022 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		AB0000000000000000000003 = {isa = XCConfigurationList; buildConfigurations = (AF0000000000000000000031 /* Debug */, AF0000000000000000000032 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A90000000000000000000001 /* XCLocalSwiftPackageReference "BeadPatternCore" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/BeadPatternCore; };
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A90000000000000000000002 /* BeadPatternCore */ = {isa = XCSwiftPackageProductDependency; package = A90000000000000000000001 /* XCLocalSwiftPackageReference "BeadPatternCore" */; productName = BeadPatternCore; };
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A40000000000000000000001 /* Project object */;
+}
