@@ -8,6 +8,11 @@ extension UTType {
 }
 
 final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked Sendable {
+    private static let defaultPreviewData: Data? = Bundle.main.url(
+        forResource: "AppIcon",
+        withExtension: "png"
+    ).flatMap { try? Data(contentsOf: $0) }
+
     struct Snapshot {
         let project: PatternProject
         let sourceData: Data?
@@ -17,7 +22,6 @@ final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked
 
     static var readableContentTypes: [UTType] { [.beadPatternProject] }
     static var writableContentTypes: [UTType] { [.beadPatternProject] }
-
     @Published var project: PatternProject
     @Published var sourceData: Data?
     @Published var sourceFilename: String?
@@ -32,7 +36,7 @@ final class PatternDocument: ReferenceFileDocument, ObservableObject, @unchecked
         self.project = project
         self.sourceData = sourceData
         self.sourceFilename = sourceFilename
-        self.previewData = previewData
+        self.previewData = previewData ?? Self.defaultPreviewData
     }
 
     required init(configuration: ReadConfiguration) throws {

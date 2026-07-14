@@ -37,22 +37,13 @@ import UIKit
     #expect(PatternExporter.renderPreview(grid: grid) != nil)
 }
 
-@Test func thumbnailLocatorAcceptsOnlyValidPreviewImages() throws {
-    let directory = FileManager.default.temporaryDirectory
-        .appendingPathComponent(UUID().uuidString, isDirectory: true)
-    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-    defer { try? FileManager.default.removeItem(at: directory) }
+@Test func newDocumentContainsImmediatePreview() throws {
+    let document = PatternDocument()
+    let snapshot = try document.snapshot(contentType: .beadPatternProject)
+    let wrapper = try PatternDocument.makeFileWrapper(snapshot: snapshot)
+    let preview = wrapper.fileWrappers?["preview.png"]?.regularFileContents
 
-    #expect(ThumbnailPreviewLocator.validPreviewURL(in: directory) == nil)
-    try Data("not an image".utf8).write(to: directory.appendingPathComponent("preview.png"))
-    #expect(ThumbnailPreviewLocator.validPreviewURL(in: directory) == nil)
-
-    let image = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4)).image { context in
-        UIColor.systemBlue.setFill()
-        context.fill(CGRect(x: 0, y: 0, width: 4, height: 4))
-    }
-    try #require(image.pngData()).write(to: directory.appendingPathComponent("preview.png"))
-    #expect(ThumbnailPreviewLocator.validPreviewURL(in: directory) != nil)
+    #expect(preview?.starts(with: [0x89, 0x50, 0x4E, 0x47]) == true)
 }
 
 @Test func directCSVImportCreatesUniqueProjectsWithoutChangingSource() async throws {

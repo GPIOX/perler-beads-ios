@@ -19,9 +19,9 @@ files can also be opened directly from Files; the app creates a separate
 3. Build and run. Automatic signing is disabled for simulator builds; select
    your own Development Team before installing on a physical device.
 
-Generated projects include a Quick Look thumbnail. PNG exports can be saved
-directly to Photos, or shared to Files and other apps; CSV exports use the
-system share sheet.
+Generated projects include a `preview.png` image and a registered document
+icon for Files. PNG exports can be saved directly to Photos, or shared to Files
+and other apps; CSV exports use the system share sheet.
 
 The image-processing package can be tested independently:
 

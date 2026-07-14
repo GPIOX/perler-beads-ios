@@ -57,8 +57,14 @@
             <string>拼豆图纸项目</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>CFBundleTypeIconFiles</key>
+            <array>
+                <string>AppIcon.png</string>
+            </array>
             <key>LSHandlerRank</key>
             <string>Owner</string>
+            <key>LSTypeIsPackage</key>
+            <true/>
             <key>LSItemContentTypes</key>
             <array>
                 <string>com.cwc.beadpattern.project</string>
