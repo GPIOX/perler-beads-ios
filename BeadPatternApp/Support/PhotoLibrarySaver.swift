@@ -40,6 +40,12 @@ final class PhotoLibrarySaver: PhotoLibrarySaving {
             throw PhotoLibrarySaveError.permissionDenied
         }
 
+        try await Self.writePNGToPhotoLibrary(data)
+    }
+
+    /// Photos executes its change block on a private queue. Keeping this helper
+    /// nonisolated prevents Swift 6 from attaching MainActor isolation to that block.
+    private nonisolated static func writePNGToPhotoLibrary(_ data: Data) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             PHPhotoLibrary.shared().performChanges {
                 let request = PHAssetCreationRequest.forAsset()
